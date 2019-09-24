@@ -1,6 +1,7 @@
 import React from 'react';
 import List from './List';
 import { connect } from 'react-redux';
+import {ADD_TODO, REMOVE_TODO, TOGGLE_TODO} from './actions';
 import './App.css';
 
 class App extends React.Component {
@@ -31,7 +32,7 @@ class App extends React.Component {
   addTodo(e) {
     e.preventDefault();
     this.props.dispatch({ 
-      type: "ADD_TODO",
+      type: ADD_TODO,
       task: this.state.value,
       id: new Date(),
       completed: false
@@ -60,7 +61,7 @@ class App extends React.Component {
   //method to remove a todo item from todos array
   removeTodo(todo) {
     this.props.dispatch({ 
-      type: "REMOVE_TODO",
+      type: REMOVE_TODO,
       id: todo.item.id,
     });
     // this.setState({
@@ -72,7 +73,7 @@ class App extends React.Component {
   toggleTodo(todo) {
     console.log(todo)
     this.props.dispatch({
-      type: "TOGGLE_TODO",
+      type: TOGGLE_TODO,
       id: todo.id
     })
 

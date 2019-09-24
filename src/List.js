@@ -16,7 +16,7 @@ class List extends React.Component {
 	}
 
 	render() {
-		console.log(this.props.items)
+		//console.log(this.props.items)
 		return(
 			<div>
 			<ul>

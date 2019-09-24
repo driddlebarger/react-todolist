@@ -58,7 +58,7 @@ function reducer(state = initialState, action) {
 }
 
 // define redux store
-const store = createStore(reducer);
+const store = createStore(reducer);	
 
 ReactDOM.render(
 	<Provider store={store}>
