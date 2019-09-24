@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import './App.css';
 
 
@@ -15,6 +16,7 @@ class List extends React.Component {
 	}
 
 	render() {
+		console.log(this.props.items)
 		return(
 			<div>
 			<ul>
@@ -37,4 +39,10 @@ class List extends React.Component {
 	}
 }
 
-export default List;
+function mapStatetoProps(state) {
+  return {
+    todos: state.todos
+  }
+}
+
+export default connect(mapStatetoProps)(List);

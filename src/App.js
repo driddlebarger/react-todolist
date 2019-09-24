@@ -1,5 +1,6 @@
 import React from 'react';
 import List from './List';
+import { connect } from 'react-redux';
 import './App.css';
 
 class App extends React.Component {
@@ -7,16 +8,16 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      value: '',
-      todos: [{
-        task: 'do some stuff',
-        id: 1,
-        completed: false
-        },{
-        task: 'blah blah blah',
-        id: 2,
-        completed: true
-      }]
+       value: ''
+    //   todos: [{
+    //     task: 'do some stuff',
+    //     id: 1,
+    //     completed: false
+    //     },{
+    //     task: 'blah blah blah',
+    //     id: 2,
+    //     completed: true
+    //   }]
     }
 
     //bind methods to the constructor
@@ -29,18 +30,27 @@ class App extends React.Component {
   //method to add todo list to todos array
   addTodo(e) {
     e.preventDefault();
-    const newTodo = {
+    this.props.dispatch({ 
+      type: "ADD_TODO",
       task: this.state.value,
       id: new Date(),
       completed: false
-    };
-    this.setState({
-    todos: [...this.state.todos, newTodo],
-    value: ''
-    })
+    });
+    this.setState({value: ''}) //clear the form input when done
+
+    // const newTodo = {
+    //   task: this.state.value,
+    //   id: new Date(),
+    //   completed: false
+    // };
+    // this.setState({
+    // todos: [...this.state.todos, newTodo],
+    // value: ''
+    // })
   }
 
-  //method to handle form input
+  // method to handle form input
+  // keep using local state for this, no need for redux
   handleOnChange(e){
     this.setState({
       value: e.target.value
@@ -49,22 +59,33 @@ class App extends React.Component {
 
   //method to remove a todo item from todos array
   removeTodo(todo) {
-    this.setState({
-      todos: this.state.todos.filter(e => e !== todo.item)
-    })
+    this.props.dispatch({ 
+      type: "REMOVE_TODO",
+      id: todo.item.id,
+    });
+    // this.setState({
+    //   todos: this.state.todos.filter(e => e !== todo.item)
+    // })
   }
 
   // method to toggle todo state
   toggleTodo(todo) {
-    const i = this.state.todos.indexOf(todo) // figure out index of the item being toggled
-    let items = [...this.state.todos]; //copy state array, set to a variable (so we aren't manipulating state directly)
-    let item = items[i] // another placeholder variable for specific index
-      item.completed = !todo.completed //update the property to opposite value (T to F, F to T)
-    items[i] = item // put new value back into copy of state array
-    // finally, update state with updated array
-    this.setState({
-      todos: items
+    console.log(todo)
+    this.props.dispatch({
+      type: "TOGGLE_TODO",
+      id: todo.id
     })
+
+
+    // const i = this.state.todos.indexOf(todo) // figure out index of the item being toggled
+    // let items = [...this.state.todos]; //copy state array, set to a variable (so we aren't manipulating state directly)
+    // let item = items[i] // another placeholder variable for specific index
+    //   item.completed = !todo.completed //update the property to opposite value (T to F, F to T)
+    // items[i] = item // put new value back into copy of state array
+    // // finally, update state with updated array
+    // this.setState({
+    //   todos: items
+    // })
   }
 
   render() {
@@ -73,7 +94,7 @@ class App extends React.Component {
       <div className="container">
         <h1>Todo List:</h1>
         
-        <List items={this.state.todos} removeTodo={this.removeTodo} toggleTodo={this.toggleTodo} />
+        <List items={this.props.todos} removeTodo={this.removeTodo} toggleTodo={this.toggleTodo} />
 
         <form onSubmit={this.addTodo}>
         <input 
@@ -90,4 +111,11 @@ class App extends React.Component {
   }
 }
 
-export default App;
+function mapStatetoProps(state) {
+  return {
+    todos: state.todos
+  }
+}
+
+//export default App;
+export default connect(mapStatetoProps)(App);
