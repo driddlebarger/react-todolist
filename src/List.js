@@ -16,7 +16,6 @@ class List extends React.Component {
 	}
 
 	render() {
-		//console.log(this.props.items)
 		return(
 			<div>
 			<ul>
@@ -24,7 +23,7 @@ class List extends React.Component {
 				<li key={index}>
 					<input type="checkbox" checked={item.completed} onChange={() => {this.toggleItem(item)}} />
 					<span style={{textDecoration: item.completed ? 'line-through': 'none' }} >
-					{item.task}
+					{item.title}
 					</span>
 					<button 
 					className="button-close" 
@@ -41,7 +40,7 @@ class List extends React.Component {
 
 function mapStatetoProps(state) {
   return {
-    todos: state.todos
+    todos: state.todos,
   }
 }
 

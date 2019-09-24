@@ -1,7 +1,8 @@
 import React from 'react';
 import List from './List';
 import { connect } from 'react-redux';
-import {ADD_TODO, REMOVE_TODO, TOGGLE_TODO} from './actions';
+import {ADD_TODO, REMOVE_TODO, TOGGLE_TODO } from './actions';
+import { fetchTodos } from './fetchTodos';
 import './App.css';
 
 class App extends React.Component {
@@ -28,12 +29,17 @@ class App extends React.Component {
     this.toggleTodo = this.toggleTodo.bind(this);
   }
 
+  componentDidMount(){
+    this.props.dispatch(fetchTodos());
+  }
+
+
   //method to add todo list to todos array
   addTodo(e) {
     e.preventDefault();
     this.props.dispatch({ 
       type: ADD_TODO,
-      task: this.state.value,
+      title: this.state.value,
       id: new Date(),
       completed: false
     });
@@ -90,7 +96,16 @@ class App extends React.Component {
   }
 
   render() {
+    const { error, loading } = this.props
     
+    if (error) {
+      return(<div>Error! {error.message}</div>)
+    }
+
+    if (loading) {
+      return(<div>Loading...</div>)
+    }
+
     return (
       <div className="container">
         <h1>Todo List:</h1>
@@ -114,7 +129,9 @@ class App extends React.Component {
 
 function mapStatetoProps(state) {
   return {
-    todos: state.todos
+    todos: state.todos,
+    loading: state.loading,
+    error: state.error
   }
 }
 
